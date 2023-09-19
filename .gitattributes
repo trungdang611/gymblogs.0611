@@ -1,0 +1,6 @@
+# Thiết lập xuống dòng cho các tệp tin cụ thể
+*.js text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+# Các thiết lập mặc định cho tất cả các tệp tin văn bản
+* text eol=lf

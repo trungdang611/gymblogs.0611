@@ -1,0 +1,93 @@
+<div class="mt-4">
+  <div class="d-flex justify-content-center align-items-center text-light">
+    <h1 class="text-orange">Blogs deleted</h1>
+  </div>
+    <div class="d-flex justify-content-end">
+      <a href="/me/stored/blogs" class="btn btn-orange text-light">
+        <i class="bi bi-back"></i>
+        Back Your Blogs
+      </a>
+    </div>
+  <table class="table table-bordered mt-4 text-light">
+    <thead class="text-orange">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Level</th>
+        <th scope="col">Time</th>
+        <th scope="col" colspan="2"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each blogs}}
+      <tr>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{this.name}}</td>
+          <td>{{this.level}}</td>
+          <td>{{this.deletedAt}}</td>
+          <td>
+            <a href="" class="btn btn-primary btn-restore" data-bs-id="{{this._id}}">Restore<a/>
+          </td>
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Blog</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure want to deletel this Blog?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="btn-delete-dom" type="button" class="btn btn-danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </tr>
+    {{else}}
+      <tr>
+        <td class="text-center" colspan="4">
+          <h3>Trash is empty!!</h3>
+        </td>
+        <td>
+          <a href="/" class="btn btn-orange text-light">Back Home</a>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<form name="delete-blog-form" method="POST">
+</form>
+<form name="restore-blog-form" method="POST">
+</form>
+
+<script>
+  const myModalEl = document.getElementById('deleteModal');
+  const btnDeleteBlog = document.getElementById("btn-delete-dom");
+  const deleteForm = document.forms['delete-blog-form'];
+  const restoreForm = document.forms['restore-blog-form'];
+  const btnsRestore = document.getElementsByClassName("btn-restore")
+
+  let blogId;
+  myModalEl.addEventListener('show.bs.modal', event => {
+    blogId = event.relatedTarget.getAttribute("data-bs-id")
+  })
+  btnDeleteBlog.onclick = function() {
+    deleteForm.action = "/blogs/" + blogId + "?_method=DELETE";
+    deleteForm.submit()
+  }
+
+  for(let i = 0; i < btnsRestore.length; i++) {
+    btnsRestore[i].addEventListener('click', event => {
+      event.preventDefault();
+      var Id = event.target.getAttribute("data-bs-id");
+      restoreForm.action = "/blogs/" + Id + "/restore?_method=PATCH";
+      restoreForm.submit()
+    })
+  }
+
+</script>

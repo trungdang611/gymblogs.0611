@@ -1,0 +1,26 @@
+@import "variables";
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+$theme-colors: (
+  "primary": $blue-200,
+  "danger": $red-500,
+  "gray": $gray-900,
+  "gray-800": $gray-800,
+  "teal": $teal-900,
+  "cyan": $cyan-900,
+  "orange": $orange,
+);
+
+img {
+  height: 15rem;
+}
+
+.blogs-img {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";

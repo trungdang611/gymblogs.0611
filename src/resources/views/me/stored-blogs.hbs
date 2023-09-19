@@ -1,0 +1,142 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<form class="mt-4" name="container-form" method="POST" action="/blogs/handle-form-actions">
+  <div class="d-flex justify-content-center">
+    <h1 class="text-orange">My Blogs</h1>
+  </div>
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex">
+      <div class="modal-sm mx-4">
+        <select class="form-select form-select-actions" aria-label="Default select example" name="action" required>
+          <option value="">Open this select menu</option>
+          <option value="delete">Delete</option>
+        </select>
+      </div>
+      <button type="submit" class="checked-submit-btn btn btn-primary disabled">Execute</button>
+    </div>
+    <div>
+      <a href="/me/trash/blogs" class="btn btn-orange text-light mr-5">
+        <i class="bi bi-trash"></i>
+        ({{deletedCount}})
+      </a>
+    </div>
+  </div>
+
+  <table class="table table-bordered mt-4 text-light">
+    <thead class="text-orange">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">
+          <div class="form-check form-check-all">
+            <input class="form-check-input" type="checkbox" value="" id="select-all">
+            </label>
+          </div>
+        </th>
+        <th scope="col">
+          Name
+          {{{sortable "name" _sort}}}
+        </th>
+        <th scope="col">
+          Level
+        </th>
+        <th scope="col">
+          Time
+        </th>
+        <th scope="col" colspan="2">
+        </th>
+      </tr>
+    </thead>
+    {{#each blogs}}
+      <tbody>
+        <tr>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>
+            <div class="form-check ">
+              <input class="form-check-input" type="checkbox" name="blogIds[]" value="{{this._id}}">
+            </div>
+          </td>
+          <td>{{this.name}}</td>
+          <td>{{this.level}}</td>
+          <td>{{this.createdAt}}</td>
+          <td>
+            <a href="/blogs/{{this._id}}/edit" class="btn btn-primary">Update<a/>
+          </td>
+          <td>
+            <button type="button" class="btn btn-danger bg-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="{{this._id}}">
+              Delete
+            </button>
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title text-black fs-5" id="deleteModalLabel">Delete Blog</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-black">
+                    Are you sure want to deletel this Blog?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="btn-delete-dom" type="button" class="btn btn-danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+    {{else}}
+        <tr>
+          <td class="text-center" colspan="4">
+            <h3>You haven't posted a Blog yet!</h3>
+          </td>
+          <td>
+            <a href="/blogs/create" class="btn btn-info bg-primary text-white">Create now</a>
+          </td>
+        </tr>
+      </tbody>
+    {{/each}}
+  </table>
+</form>
+<form name="delete-blog-form" method="POST">
+</form>
+<script>
+    const myModalEl = document.getElementById('deleteModal');
+    const btnDeleteBlog = document.getElementById("btn-delete-dom");
+    const deleteForm = document.forms['delete-blog-form'];
+    const containerForm = $('form[name="container-form"]')
+    const selectAll = $("#select-all");
+    const blogItemSelect = $('input[name="blogIds[]"]')
+    const checkSubmitBtn = $(".checked-submit-btn");
+    const formSelectActions = $(".form-select-actions")
+
+
+    var blogId;
+    myModalEl.addEventListener('show.bs.modal', function (event) {
+      blogId = event.relatedTarget.getAttribute("data-bs-id")
+    })
+
+    btnDeleteBlog.onclick = function() {
+      deleteForm.action = "/blogs/" + blogId + "?_method=DELETE";
+      deleteForm.submit()
+    }
+
+    selectAll.change(function() {
+      let isCheckedAll = $(this).prop("checked");
+      blogItemSelect.prop("checked", isCheckedAll)
+      renderExecuteBtn() 
+    }) 
+
+    blogItemSelect.change(function() {
+      let isCheckedAll = blogItemSelect.length === $('input[name="blogIds[]"]:checked').length;
+      selectAll.prop("checked",isCheckedAll)
+      renderExecuteBtn() 
+    })
+
+    function renderExecuteBtn() {
+      var checkedCount = $('input[name="blogIds[]"]:checked').length;
+      if(checkedCount > 0 ) {
+        checkSubmitBtn.removeClass("disabled")
+      } else {
+        checkSubmitBtn.addClass("disabled")
+      }
+    }
+</script>
