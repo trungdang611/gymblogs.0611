@@ -12,7 +12,7 @@ import SortMiddleware from "./app/middleware/SortMiddleware.js";
 connect();
 
 const app = express();
-const port = 1700;
+const port = 80;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
