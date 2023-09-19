@@ -1,13 +1,4 @@
 @charset "UTF-8";
-img {
-  height: 15rem;
-}
-
-.blogs-img {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
 /*!
  * Bootstrap  v5.2.3 (https://getbootstrap.com/)

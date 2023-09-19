@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const BlogPost = new Schema({
   name: { type: String },
   slug: { type: String, slug: "name", unique: true },
-  description: { type: String },
+  description_1: { type: String },
+  description_2: { type: String },
   image: { type: String },
   videoId: { type: String },
   level: { type: String },
@@ -19,7 +20,12 @@ const BlogPost = new Schema({
 // Add Plugins
 mongoose.plugin(slug);
 BlogPost.plugin(softDeletePlugin);
-BlogPost.index({ title: "text", description: "text", tags: "text" });
+BlogPost.index({
+  title: "text",
+  description_1: "text",
+  description_2: "text",
+  tags: "text",
+});
 
 const Blog = mongoose.model("Blogs", BlogPost);
 export default Blog;

@@ -17,7 +17,7 @@ class SiteController {
     const search = req.query.search;
     Blog.find({ $text: { $search: ".*" + search + ".*" } })
       .then((blogs) => {
-        res.render("search", { blogs: obj.mutipleMongooseToObject(blogs) });
+        res.render("SEARCH", { blogs: obj.mutipleMongooseToObject(blogs) });
       })
       .catch(next);
   }
